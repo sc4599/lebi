@@ -1,6 +1,7 @@
 # coding=utf-8
 from flask import Flask
 from application.views.frontend import frontend_blueprint
+from application.views.user import user_blueprint
 from application.extensions.database import db
 
 
