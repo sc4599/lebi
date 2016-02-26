@@ -1,10 +1,11 @@
 # coding=utf-8
 from datetime import datetime
 from application.extensions.database import db
-from werkzeug.security import generate_password_hash
+from werkzeug.security import generate_password_hash, check_password_hash
+from flask.ext.login import UserMixin
 
 
-class Users(db.Document):
+class Users(db.Document, UserMixin):
     GENDER = {
         'male': 1,  # 男
         'female': 0,  # 女
@@ -32,3 +33,7 @@ class Users(db.Document):
             user.email = email
         user.save()
         return user
+
+    def check_password(self, password):
+        if check_password_hash(self.password, password):
+            return True

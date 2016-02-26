@@ -21,7 +21,7 @@ def create_admin(username, password):
 
 @manager.command
 def init_group():
-    groups = [u'人力资源', u'牵手项目组', u'技术实验室']
+    groups = [u'人力资源', u'牵手项目组', u'总裁办']
     for g in groups:
         Groups.create(g)
 
@@ -31,6 +31,7 @@ def init_users():
     users = [
         {'name': u'陈强胜', 'group': u'牵手项目组', 'gender': 'male'},
         {'name': u'宋超', 'group': u'牵手项目组', 'gender': 'male'},
+        {'name': u'李小玲', 'group': u'总裁办', 'gender': 'female'},
     ]
     for user in users:
         group = Groups.objects(name=user['group']).first()
