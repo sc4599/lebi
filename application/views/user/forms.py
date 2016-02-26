@@ -4,6 +4,7 @@ from wtforms.fields import StringField, SelectField
 from wtforms.validators import DataRequired
 from application.models.user import Users
 from application.models.groups import Groups
+from flask.ext.login import current_user
 
 
 class SendLebiForm(Form):
@@ -13,6 +14,7 @@ class SendLebiForm(Form):
     effect = StringField(u'成果', [DataRequired(u'成果不能为空')])
 
     def init_choices(self):
+        # TODO 此处应该增加发放限制条件
         groups = []
         all_groups = Groups.objects().order_by().all()
         for group in all_groups:
@@ -20,5 +22,7 @@ class SendLebiForm(Form):
                 groups.append(group)
 
         users = Users.objects(group_id=groups[0].id).all()
-        self.receiver.choices = [(str(user.id), user.username) for user in users]
+        self.receiver.choices = [
+            (str(user.id), user.username) for user in users if user.username != current_user.username
+        ]
         self.receiver_group.choices = [(str(group.id), group.name) for group in groups]

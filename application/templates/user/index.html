@@ -1,1 +1,21 @@
-user index
+{% extends 'base_layout.html' %}
+{% block content %}
+    <table>
+    <tr>
+        <th>序号</th>
+        <th>标题</th>
+        <th>原因</th>
+        <th>成果</th>
+        <th>时间</th>
+    </tr>
+    {% for item in result %}
+    <tr>
+    <td>{{ loop.index }}</td>
+    <td>{{ item.format }}</td>
+    <td>{{ item.reason }}</td>
+    <td>{{ item.effect }}</td>
+    <td>{{ item.created_time }}</td>
+    </tr>
+    {% endfor %}
+    </table>
+{% endblock %}
