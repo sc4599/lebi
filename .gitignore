@@ -1,3 +1,4 @@
 .idea/
 *.cfg
 *.py[co]
+.DS_Store

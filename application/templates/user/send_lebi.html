@@ -1,0 +1,14 @@
+{% extends "base_layout.html" %}
+{% block content %}
+    <form method="post">
+        {% for key, error in form.errors.items() %}
+            {{ error.pop() }}<br/>
+        {% endfor %}
+        {{ form.hidden_tag() }}
+        {{ form.receiver }}<br/>
+        {{ form.reason }}<br/>
+        {{ form.effect }}<br/>
+        {{ form.receiver_group }}<br/>
+        <input type="submit" />
+    </form>
+{% endblock %}
