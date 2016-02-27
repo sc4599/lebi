@@ -1,12 +1,8 @@
 {% extends "base_layout.html" %}
-{% block content %}
-    <form method="post">
-        {% for key, error in form.errors.items() %}
-            {{ error.pop() }}<br/>
-        {% endfor %}
-        {{ form.hidden_tag() }}
-        {{ form.username }}<br/>
-        {{ form.password }}<br/>
-        <input type="submit" />
-    </form>
+{% from "_macros.html" import render_form, render_field %}
+{% block content  %}
+{% call render_form(form, btn='登陆') %}
+    {{ render_field(form.username) }}
+    {{ render_field(form.password) }}
+{% endcall %}
 {% endblock %}

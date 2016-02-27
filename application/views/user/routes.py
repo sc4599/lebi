@@ -1,5 +1,5 @@
 # coding=utf-8
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, current_app
 from .forms import SendLebiForm
 from flask.ext.login import login_required, current_user
 from application.models.lebi import LeBi
@@ -18,6 +18,9 @@ def index():
 @user_blueprint.route('/send/lebi/', methods=['GET', 'POST'])
 @login_required
 def send_lebi():
+    if current_user.current_month_sent_count >= current_app.config.get('MONTH_LEBI_NUM', 10):
+        form = None
+        return render_template('user/send_lebi.html', form=form)
     form = SendLebiForm()
     form.init_choices()
     if form.validate_on_submit():

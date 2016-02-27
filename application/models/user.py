@@ -1,5 +1,6 @@
 # coding=utf-8
-from datetime import datetime
+import calendar
+from datetime import datetime, date
 from application.extensions.database import db
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask.ext.login import UserMixin
@@ -37,3 +38,21 @@ class Users(db.Document, UserMixin):
     def check_password(self, password):
         if check_password_hash(self.password, password):
             return True
+
+    @property
+    def current_month_sent_count(self):
+        """
+        发送乐币数量
+        :return:
+        """
+        from application.models.lebi import LeBi
+        today = date.today()
+        end_day = calendar.monthrange(today.year, today.month)[1]
+        start_date = today.replace(day=1)
+        end_date = today.replace(day=end_day)
+        return LeBi.objects(
+            creator_id=self.id,
+            created_at__gte=start_date,
+            created_at__lt=end_date,
+        ).count()
+
