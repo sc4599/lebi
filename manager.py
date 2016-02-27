@@ -29,9 +29,7 @@ def init_group():
 @manager.command
 def init_users():
     users = [
-        {'name': u'陈强胜', 'group': u'牵手项目组', 'gender': 'male'},
-        {'name': u'宋超', 'group': u'牵手项目组', 'gender': 'male'},
-        {'name': u'李小玲', 'group': u'总裁办', 'gender': 'female'},
+        {'name': u'陈龙水', 'group': u'总裁办', 'gender': 'male'},
     ]
     for user in users:
         group = Groups.objects(name=user['group']).first()
@@ -40,7 +38,7 @@ def init_users():
             username=user['name'],
             group_id=group.id,
             gender=Users.GENDER[user['gender']],
-            password=app.config.get('DEFAULT_PASSWORD', 'zyl.bzw'),
+            password=app.config.get('DEFAULT_PASSWORD'),
         )
 
 

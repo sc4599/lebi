@@ -15,11 +15,6 @@
     {% endblock %}
 </head>
 <body role="document">
-<a href="https://github.com/chentongxue/lebi" target="_blank">
-    <img style="position: absolute; top: 0; right: 0; z-index:9999; border: 0;"
-         src="{{ url_for('static', filename='images/fork_me.png') }}"
-         alt="Fork me on GitHub" />
-</a>
 <header class="navbar navbar-static-top bs-docs-nav navbar-inverse" id="top" role="banner">
     <div class="container">
         <div class="navbar-header">
@@ -31,10 +26,40 @@
                     <a href="{{ url_for('frontend.index') }}">Home</a>
                 </li>
             </ul>
+            <ul class="nav navbar-nav navbar-right">
+                {% if current_user.is_authenticated %}
+                <li class="dropdown{% if request.endpoint in ['user.account'] %} active{% endif %}">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                       aria-expanded="false">{{ current_user.username }} <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{{ url_for('user.index') }}">用户中心</a></li>
+                        <li><a href="{{ url_for('user.send_lebi') }}">发送乐币</a></li>
+                        <li><a href="{{ url_for('user.password_edit') }}">修改密码</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="{{ url_for('frontend.logout') }}">退出</a></li>
+                    </ul>
+                </li>
+                {% else %}
+                <li{% if request.endpoint == 'frontend.register' %} class="active"{% endif %}>
+                    <a href="{{ url_for('frontend.register') }}">注册</a>
+                </li>
+                <li{% if request.endpoint == 'frontend.login' %} class="active"{% endif %}>
+                    <a href="{{ url_for('frontend.login') }}">登陆</a>
+                </li>
+                {% endif %}
+            </ul>
         </nav>
     </div>
 </header>
 <div class="container theme-showcase">
+    {% if current_user.is_authenticated and current_user.using_default_password %}
+    <div class="alert alert-danger" role="alert">
+        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+        <span class="sr-only">Error:</span>
+        检测到您未修改初始密码，请尽快 <a href="{{ url_for('user.password_edit') }}">修改密码</a>
+    </div>
+    {% endif %}
     {% block content %}
     {% endblock %}
 </div>
@@ -42,6 +67,9 @@
     <div class="container">
         <p class="muted credit text-center">
             Copyright ©2016 Suzaku All Rights Reserved.
+            <a href="https://github.com/chentongxue/lebi" target="_blank">
+                Fork me on github!
+            </a>
         </p>
     </div>
 </footer>

@@ -1,0 +1,9 @@
+{% extends "base_layout.html" %}
+{% from "_macros.html" import render_form, render_field %}
+{% block content  %}
+{% call render_form(form, btn='注册') %}
+    {{ render_field(form.username) }}
+    {{ render_field(form.password) }}
+    {{ render_field(form.password2) }}
+{% endcall %}
+{% endblock %}

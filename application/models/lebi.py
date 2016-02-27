@@ -2,6 +2,7 @@
 from datetime import datetime
 from application.extensions.database import db
 from application.models.user import Users
+from application.models.groups import Groups
 
 
 class LeBi(db.Document):
@@ -28,6 +29,14 @@ class LeBi(db.Document):
         return lebi
 
     @property
+    def receiver_group(self):
+        return Groups.objects(id=self.receiver_group_id).first()
+
+    @property
+    def creator_group(self):
+        return Groups.objects(id=self.creator_group_id).first()
+
+    @property
     def receiver(self):
         return Users.objects(id=self.receiver_id).first()
 
@@ -37,7 +46,12 @@ class LeBi(db.Document):
 
     @property
     def format(self):
-        return u'{creator}发给{receiver}'.format(creator=self.creator.username, receiver=self.receiver.username)
+        return u'{creator}[ <b>{creator_group}</b> ] 发给 {receiver}[ <b>{receiver_group}</b> ]'.format(
+            creator=self.creator.username,
+            receiver=self.receiver.username,
+            creator_group=self.creator_group.name,
+            receiver_group=self.receiver_group.name,
+        )
 
     @property
     def created_time(self):
