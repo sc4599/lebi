@@ -11,17 +11,18 @@ user_blueprint = Blueprint('user', __name__)
 @user_blueprint.route('/')
 @login_required
 def index():
-    result = LeBi.objects().all()
+    result = LeBi.objects().order_by('-created_at').all()
     return render_template('user/index.html', result=result)
 
 
 @user_blueprint.route('/send/lebi/', methods=['GET', 'POST'])
-@user_blueprint.route('/send/lebi/<string:oid>/')
+@user_blueprint.route('/send/lebi/<string:oid>/' , methods=['GET', 'POST'])
 @login_required
 def send_lebi(oid=None):
     if current_user.current_month_sent_count >= current_app.config.get('MONTH_LEBI_NUM', 10):
         form = None
         return render_template('user/send_lebi.html', form=form)
+    obj = None
     if oid:
         obj = LeBi.objects(id=oid).first()
         form = SendLebiForm(obj=obj)
@@ -29,12 +30,19 @@ def send_lebi(oid=None):
         form = SendLebiForm()
     form.init_choices()
     if form.validate_on_submit():
-        LeBi.create(
-            receiver_id=form.receiver_id.data,
-            reason=form.reason.data,
-            effect=form.effect.data,
-            creator=current_user,
-        )
+        if obj:
+            obj.receiver_id = form.receiver_id.data
+            obj.reason = form.reason.data
+            obj.effect = form.effect.data
+            obj.receiver_group_id = form.receiver_group_id.data
+            obj.save()
+        else:
+            LeBi.create(
+                receiver_id=form.receiver_id.data,
+                reason=form.reason.data,
+                effect=form.effect.data,
+                creator=current_user,
+            )
         return redirect(url_for('user.index'))
     return render_template('user/send_lebi.html', form=form)
 

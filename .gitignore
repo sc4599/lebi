@@ -2,3 +2,4 @@
 *.cfg
 *.py[co]
 .DS_Store
+data.csv

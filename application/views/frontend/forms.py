@@ -20,7 +20,7 @@ class LoginForm(Form):
             raise ValidationError(u'用户名 {username} 不存在！'.format(username=field.data))
 
     def validate_password(self, field):
-        if not self.user.check_password(field.data):
+        if self.user and not self.user.check_password(field.data):
             raise ValidationError(u'密码错误')
 
     @property
