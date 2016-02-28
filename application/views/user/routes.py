@@ -61,7 +61,7 @@ def send_lebi(oid=None):
                 effect=form.effect.data,
                 creator=current_user,
             )
-        return redirect(url_for('user.index'))
+        return redirect(url_for('user.records'))
     return render_template('user/send_lebi.html', form=form)
 
 
