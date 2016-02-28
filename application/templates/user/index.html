@@ -1,4 +1,5 @@
 {% extends 'base_layout.html' %}
+{% from "_macros.html" import render_pagination %}
 {% block content %}
     <table class="table table-bordered table-striped table-hover">
     <thead>
@@ -11,7 +12,7 @@
         <th>操作</th>
     </tr>
     </thead>
-    {% for item in result %}
+    {% for item in result.items %}
     <tr>
     <td>{{ loop.index }}</td>
     <td>{{ item.format|safe }}</td>
@@ -22,6 +23,12 @@
         <a href="{{ url_for('user.send_lebi', oid=item.id) }}">编辑</a>
     </td>
     </tr>
+    {% else %}
+    <tr>
+        <td colspan="6">暂无数据</td>
+    </tr>
     {% endfor %}
     </table>
+
+{{ render_pagination(result) }}
 {% endblock %}
