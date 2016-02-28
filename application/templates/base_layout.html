@@ -25,6 +25,9 @@
                 <li{% if request.endpoint == 'frontend.index' %} class="active"{% endif %}>
                     <a href="{{ url_for('frontend.index') }}">Home</a>
                 </li>
+                <li {% if request.endpoint == 'user.records' %} class="active"{% endif %}>
+                    <a href="{{ url_for('user.records') }}">乐币记录</a>
+                </li>
                 <li{% if request.endpoint == 'user.send_lebi' %} class="active"{% endif %}>
                     <a href="{{ url_for('user.send_lebi') }}">发送乐币</a>
                 </li>

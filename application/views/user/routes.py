@@ -11,10 +11,26 @@ user_blueprint = Blueprint('user', __name__)
 @user_blueprint.route('/')
 @login_required
 def index():
+    count = {
+        'received_count': LeBi.objects(receiver_id=current_user.id).count(),
+        'created_count': LeBi.objects(creator_id=current_user.id).count(),
+    }
+    return render_template('user/index.html', count=count)
+
+
+@user_blueprint.route('/records/')
+@user_blueprint.route('/records/<string:act>/')
+@login_required
+def records(act=None):
     page = request.args.get('page', 1)
     page = int(page)
-    result = LeBi.objects().order_by('-created_at').paginate(page=page, per_page=20)
-    return render_template('user/index.html', result=result)
+    if act == 'received':
+        result = LeBi.objects(receiver_id=current_user.id).paginate(page=page, per_page=20)
+    elif act == 'created':
+        result = LeBi.objects(creator_id=current_user.id).paginate(page=page, per_page=20)
+    else:
+        result = LeBi.objects().order_by('-created_at').paginate(page=page, per_page=20)
+    return render_template('user/records.html', result=result, act=act)
 
 
 @user_blueprint.route('/send/lebi/', methods=['GET', 'POST'])
