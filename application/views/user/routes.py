@@ -1,5 +1,5 @@
 # coding=utf-8
-from flask import Blueprint, render_template, current_app, redirect, url_for, request
+from flask import Blueprint, render_template, current_app, redirect, url_for, request, abort
 from .forms import SendLebiForm, PasswordEditForm
 from flask.ext.login import login_required, current_user
 from application.models.lebi import LeBi
@@ -43,6 +43,8 @@ def send_lebi(oid=None):
     obj = None
     if oid:
         obj = LeBi.objects(id=oid).first()
+        if obj.creator_id != current_user.id:
+            abort(403)
         form = SendLebiForm(obj=obj)
     else:
         form = SendLebiForm()
