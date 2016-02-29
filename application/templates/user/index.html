@@ -1,0 +1,27 @@
+{% extends "base_layout.html" %}
+{% block content %}
+    <div class="row">
+        <div class="col-md-8">
+            <ul class="list-group">
+                <li class="list-group-item">
+                    姓名：{{ current_user.username }}
+                </li>
+                <li class="list-group-item">
+                    团队：{{ current_user.group.name }}
+                </li>
+            </ul>
+        </div>
+        <div class="col-md-4">
+            <ul class="list-group">
+                <li class="list-group-item">
+                    <span class="badge">{{ count['received_count'] }}</span>
+                    <a href="{{ url_for('user.records', act='received') }}">收到的乐币</a>
+                </li>
+                <li class="list-group-item">
+                    <span class="badge">{{ count['created_count'] }}</span>
+                    <a href="{{ url_for('user.records', act='created') }}">发送的乐币</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+{% endblock %}

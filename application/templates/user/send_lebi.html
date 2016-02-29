@@ -1,0 +1,33 @@
+{% extends "base_layout.html" %}
+{% from "_macros.html" import render_form, render_field %}
+{% block content  %}
+{% if form %}
+    {% call render_form(form) %}
+        {{ render_field(form.receiver_group_id) }}
+        {{ render_field(form.receiver_id) }}
+        {{ render_field(form.reason) }}
+        {{ render_field(form.effect) }}
+    {% endcall %}
+    <script type="text/javascript">
+        $('#receiver_group_id').change(function(){
+            var group_id = $(this).val();
+            var url = '{{ url_for('api.group_users', group_id='xxxx') }}';
+            url = url.replace('xxxx', group_id);
+            $.get(url, function(data){
+                var html = [];
+                for(var i=0; i<data['data'].length; i++){
+                    var users = data['data'][i];
+                    html.push('<option value="' + users['id'] + '">' + users['username'] + '</option>');
+                }
+                $('#receiver_id').html(html.join());
+            });
+        })
+    </script>
+{% else %}
+    <div class="alert alert-danger" role="alert">
+        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+        <span class="sr-only">Error:</span>
+        您当月可发放的乐币已用完。
+    </div>
+{% endif %}
+{% endblock %}
